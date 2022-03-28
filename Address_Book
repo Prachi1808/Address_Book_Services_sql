@@ -1,0 +1,126 @@
+UC1 -Ability to create a Address Book Service DB
+CREATE DATABASE Address_Book_Services;
+uc2 -Ability to create a AddressBook Table with first and last names, address, city,state, zip, phone number and email as its attributes
+CREATE TABLE Address_Book_Services (EmployeeName varchar(255),FirstName varchar(255),LastName varchar(255),Address varchar(255),City varchar(255),State varchar(255),Zipcode varchar(10),PhoneNumber varchar(255),Email varchar(255) );
+Query OK, 0 rows affected (0.10 sec)
+
+mysql> desc Address_Book_Services;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| EmployeeName | varchar(255) | YES  |     | NULL    |       |
+| FirstName    | varchar(255) | YES  |     | NULL    |       |
+| LastName     | varchar(255) | YES  |     | NULL    |       |
+| Address      | varchar(255) | YES  |     | NULL    |       |
+| City         | varchar(255) | YES  |     | NULL    |       |
+| State        | varchar(255) | YES  |     | NULL    |       |
+| Zipcode      | varchar(10)  | YES  |     | NULL    |       |
+| PhoneNumber  | varchar(255) | YES  |     | NULL    |       |
+| Email        | varchar(255) | YES  |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+uc3-Ability to insert new Contacts to Address Book,uc-4 Ability to edit existing contact person using their
+
+name
+ALTER TABLE Address_Book_Services ADD New_Contact varchar(255) NOT NULL AFTER Email;
+Query OK, 0 rows affected (0.05 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc Address_Book_Services;
++--------------+--------------+------+-----+---------+-------+
+| Field        | Type         | Null | Key | Default | Extra |
++--------------+--------------+------+-----+---------+-------+
+| EmployeeName | varchar(255) | YES  |     | NULL    |       |
+| FirstName    | varchar(255) | YES  |     | NULL    |       |
+| LastName     | varchar(255) | YES  |     | NULL    |       |
+| Address      | varchar(255) | YES  |     | NULL    |       |
+| City         | varchar(255) | YES  |     | NULL    |       |
+| State        | varchar(255) | YES  |     | NULL    |       |
+| Zipcode      | varchar(10)  | YES  |     | NULL    |       |
+| PhoneNumber  | varchar(255) | YES  |     | NULL    |       |
+| Email        | varchar(255) | YES  |     | NULL    |       |
+| New_Contact  | varchar(255) | NO   |     | NULL    |       |
++--------------+--------------+------+-----+---------+-------+
+uc5 -Ability to delete a person using person's name
+ DELETE FROM Address_Book_Services WHERE FirstName ="Prachi";
+ Query OK, 1 row affected (0.01 sec)
+uc6-Ability to Retrieve Person belonging to a City or State from the Address Book
+SELECT FirstName FROM Address_Book_Services WHERE City ="Phui";
++-----------+
+| FirstName |
++-----------+
+| Parimita  |
++-----------+
+1 row in set (0.00 sec)
+
+ SELECT FirstName FROM Address_Book_Services WHERE State ="Odisha";
++-----------+
+| FirstName |
++-----------+
+| Parimita  |
++-----------+
+uc7-Ability to understand the size of addressbook by City and State
+SELECT COUNT(City),COUNT(State),City,State FROM Address_Book_Services GROUP BY City;
++-------------+--------------+------+--------+
+| COUNT(City) | COUNT(State) | City | State  |
++-------------+--------------+------+--------+
+|           1 |            1 | Phui | Odisha |
++-------------+--------------+------+--------+
+uc8-Ability to retrieve entries sorted alphabetically by Person’s name for a given city
+ SELECT FirstName,LastName FROM Address_Book_Services ORDER BY FirstName;
++-----------+----------+
+| FirstName | LastName |
++-----------+----------+
+| Parimita  | Mohanty  |
++-----------+----------+
+1 row in set (0.00 sec)
+uc9-Ability to identify each Address Book with name and Type. - Here the type could Family, Friends,Profession, etc
+ALTER TABLE Address_Book_Services ADD Friend varchar(250);
+Query OK, 0 rows affected (0.03 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE Address_Book_Services ADD Profession varchar(250);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM Address_Book_Services;
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+| EmployeeName     | FirstName | LastName | Address    | City | State  | Zipcode | PhoneNumber | Email               | New_Contact | Family | Friend | Profession |
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+| Parimita Mohanty | Parimita  | Mohanty  | Kendupadar | Phui | Odisha | 762001  | 897654398   | prach.ytr@gmail.com | 8765897777  | NULL   | NULL   | NULL       |
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+1 row in set (0.00 sec)
+ UPDATE Address_Book_Services SET Family = "Ria" WHERE FirstName ="Parimita";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Address_Book_Services SET Friend = "Ram" WHERE FirstName ="Parimita";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE Address_Book_Services SET Profession = "Doctor" WHERE FirstName ="Parimita";
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM Address_Book_Services;
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+| EmployeeName     | FirstName | LastName | Address    | City | State  | Zipcode | PhoneNumber | Email               | New_Contact | Family | Friend | Profession |
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+| Parimita Mohanty | Parimita  | Mohanty  | Kendupadar | Phui | Odisha | 762001  | 897654398   | prach.ytr@gmail.com | 8765897777  | Ria    | Ram    | Doctor     |
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+1 row in set (0.00 sec)
+uc10-Ability to get number of contact persons i.e. count by type
+UC11-Ability to add person
+
+to both Friend and
+
+Family
+ SELECT * FROM Address_Book_Services;
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+| EmployeeName     | FirstName | LastName | Address    | City | State  | Zipcode | PhoneNumber | Email               | New_Contact | Family | Friend | Profession |
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+| Parimita Mohanty | Parimita  | Mohanty  | Kendupadar | Phui | Odisha | 762001  | 897654398   | prach.ytr@gmail.com | 8765897777  | Ria    | Ram    | Doctor     |
++------------------+-----------+----------+------------+------+--------+---------+-------------+---------------------+-------------+--------+--------+------------+
+1 row in set (0.00 sec)
+
+UC12-Draw the ER Diagram for
+Address Book Service DB
